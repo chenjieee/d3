@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+<head>
+<script src="d3.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+var data = [
+    { x : 1, y : 1, r : 1 },
+    { x : 2, y : 2, r : 2 },
+    { x : 3, y : 3, r : 3 },
+    { x : 4, y : 4, r : 4 },
+    { x : 5, y : 5, r : 5 }
+];
+
+var maxWidth = 500;
+var maxHeight= 500;
+
+var maxX = d3.max(data, function(d) { return d.x });
+var maxY = d3.max(data, function(d) { return d.y });
+var maxR = d3.max(data, function(d) { return d.r });
+
+var xScale = d3.scale.linear().domain([0, maxX]).range([0, maxWidth]);
+var yScale = d3.scale.linear().domain([0, maxY]).range([0, maxHeight]);
+var rScale = d3.scale.linear().domain([0, maxR]).range([0, 100]);
+
+setTimeout(function() {
+    d3.select('svg')
+    	.selectAll('circle')
+    	.data(data, function(d) { return d.r })
+    	.enter()
+        	.append('circle')
+        	.attr('r', function(d) { return rScale(d.r) })
+        	.attr('cx', function(d) { return xScale(d.x) })
+        	.attr('cy', function(d) { return yScale(d.y) })
+        	.attr('fill', 'lightblue')
+        	.attr('stroke', 'red')
+        	.attr('stroke-width', 1);
+});
+
+function go() {
+    data[3] = { x : 3, y : 2, r : 4 };
+    d3.selectAll('circle')
+    	.data(data, function(d) { return d.r })
+    	.attr('cx', function(d) { return xScale(d.x) })
+    	.attr('cy', function(d) { return yScale(d.y) });
+}
+</script>
+</head>
+<body>
+
+<div>
+    <svg style="width: 500px; height: 500px; border: 1px lightgray solid;"></svg>
+    <button onclick="go()">GO</button>
+</div>
+
+</body>
+</html>

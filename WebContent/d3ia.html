@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head>
+<script src="d3.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+function go() {
+    d3.csv('cities.csv', function(cities) {
+        d3.select('#root')
+        	.selectAll('div.cities')
+        	.data(cities)
+        	.enter()
+        	.append('div')
+        	.attr('class', 'cities')
+        	.html(function(d, i) { return (i + 1) + '. ' + d.label + ' [ ' + d.country + ' ]'; });
+    });
+}
+</script>
+</head>
+<body>
+
+<div>
+    <button onclick="go()">GO</button>
+    <div id="root"></div>
+</div>
+
+</body>
+</html>

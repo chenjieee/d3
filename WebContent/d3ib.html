@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+<script src="d3.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+setTimeout(function() {
+    d3.csv('cities.csv', function(data) {
+        var cities = data;
+        var maxPopulation = d3.max(cities, function(d) { return +d.population; });
+        console.log('max pop: ' + maxPopulation);
+        var yScale = d3.scale.linear().domain([0, maxPopulation]).range([0, 300]);
+        d3.select('svg')
+        	.selectAll('rect')
+        	.data(cities)
+        	.enter()
+        	.append('rect')
+        	.attr('x', function(d, i) { return i * 50; })
+        	.attr('y', function(d) { return 300 - yScale(+d.population); })
+        	.attr('width', 40)
+        	.attr('height', function(d) { return yScale(+d.population); })
+        	.attr('fill', 'lightblue')
+        	.attr('stroke', 'red')
+        	.attr('stroke-width', '1px');
+    });
+});
+</script>
+</head>
+<body>
+
+<div>
+    <svg style="width: 400px; height: 300px; border: 1px lightgray solid;"></svg>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+<script src="d3.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+setTimeout(function() {
+    var maxHeight = 300;
+    d3.json('tweets.json', function(data) {
+        var tweets = data.tweets;
+
+        var users = d3.nest().key(function(tweet) { return tweet.user; }).entries(tweets);
+		users.forEach(function(user) {
+            user.numTweets = user.values.length;
+        });
+
+        var maxTweets = d3.max(users, function(user) { return user.numTweets; });
+
+        var yScale = d3.scale.linear().domain([0, maxTweets]).range([0, maxHeight]);
+
+        d3.select('svg')
+        	.selectAll('rect')
+        	.data(users)
+        	.enter()
+        	.append('rect')
+        	.attr('width', 40)
+        	.attr('height', function(d) { return yScale(d.numTweets); })
+        	.attr('x', function(d, i) { return i * 50; })
+        	.attr('y', function(d) { return maxHeight - yScale(d.numTweets); })
+        	.attr('stroke', 'red')
+        	.attr('stroke-width', 1)
+        	.attr('fill', 'lightblue')
+    	;
+    });    
+});
+</script>
+</head>
+<body>
+
+<div>
+    <svg style="width: 400px; height: 300px; border: 1px lightgray solid;"></svg>
+</div>
+
+</body>
+</html>
