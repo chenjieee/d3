@@ -1,24 +1,31 @@
 <!doctype html>
 <html>
 <head>
-<script src="d3.js" type="text/javascript" charset="utf-8"></script>
+<meta charset="utf-8" />
+<script src="d3.js" type="text/javascript"></script>
 <style type="text/css">
+g.k g.bg path {
+    fill: none;
+    stroke: #b00000;
+    stroke-width: 1px;
+    stroke-dasharray: 1 4;
+}
 g.k g.yang rect {
     fill: none;
-    stroke: #a52d25;
+    stroke: #ff3232;
     stroke-width: 1px;
 }
 g.k g.yang path {
     fill: none;
-    stroke: #a52d25;
+    stroke: #ff3232;
     stroke-width: 1px;
 }
 g.k g.yin rect {
-    fill: #66ffff;
+    fill: #54ffff;
 }
 g.k g.yin path {
     fill: none;
-    stroke: #66ffff;
+    stroke: #54ffff;
     stroke-width: 1px;
 }
 g.k g.cross path {
@@ -28,22 +35,22 @@ g.k g.cross path {
 }
 g.k g.ma5 path {
     fill: none;
-    stroke: #ffffff;
+    stroke: #fafafa;
     stroke-width: 1px;
 }
 g.k g.ma10 path {
     fill: none;
-    stroke: #fff837;
+    stroke: #ffff00;
     stroke-width: 1px;
 }
 g.k g.ma20 path {
     fill: none;
-    stroke: #c364d6;
+    stroke: #ff00ff;
     stroke-width: 1px;
 }
 g.k g.ma60 path {
     fill: none;
-    stroke: #62ca0e;
+    stroke: #00ff00;
     stroke-width: 1px;
 }
 </style>
@@ -96,6 +103,16 @@ setTimeout(function() {
         var gK = d3.select('svg')
         	.append('g')
         	.attr('class', 'k');
+
+        var gBg = gK.append('g')
+        	.attr('class', 'bg');
+        gBg.append('path')
+	    	.attr('d', 'M 0,' + (maxHeight * .25) + ' L ' + maxWidth + ',' + (maxHeight * .25));
+        gBg.append('path')
+    		.attr('d', 'M 0,' + (maxHeight * .50) + ' L ' + maxWidth + ',' + (maxHeight * .50));
+        gBg.append('path')
+			.attr('d', 'M 0,' + (maxHeight * .75) + ' L ' + maxWidth + ',' + (maxHeight * .75));
+
         var gYang = gK.selectAll('g.yang')
         	.data(yang)
         	.enter()
@@ -152,7 +169,7 @@ setTimeout(function() {
 <body>
 
 <div>
-    <svg style="width: 1500px; height: 300px; border: 1px lightgray solid; background-color: #131c29;"></svg>
+    <svg style="width: 1500px; height: 300px; border: 1px #b00000 solid; background-color: #000000;"></svg>
 </div>
 
 </body>
