@@ -29,7 +29,7 @@ function onload() {
         var max = d3.max(data, function(d) { return Number(d.high) });
         var scale = d3.scale.linear().domain([min, max]).range([0, maxHeight]);
 
-        var axis = d3.svg.axis().scale(scale).orient('right').tickSize(maxWidth);
+        var axis = d3.svg.axis().scale(scale).orient('right');
 
         function left(d) { return d.index * width + 1 }
         function mid(d) { return (d.index + .5) * width  }
@@ -48,10 +48,12 @@ function onload() {
 
         var gK = d3.select('svg')
             .append('g')
-            .attr('class', 'k');
+            .attr('class', 'k')
+            .attr('transform', 'translate(50, 50)');
 
         var gAxis = gK.append('g')
             .attr('class', 'axis')
+            .attr('transform', 'translate(' + maxWidth + ', 0)')
             .call(axis);
 
         var gYang = gK.selectAll('g.yang')
