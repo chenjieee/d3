@@ -9,7 +9,7 @@ function calcMA(data, n) {
     }
     for (var i = n; i <= data.length; i++) {
         var nData = data.slice(i - n, i);
-        data[i - 1].ma[n] = d3.mean(nData, function(d) { return d.close });
+        data[i - 1].ma[n] = d3.mean(nData, function(d) { return Number(d.close) });
     }
 }
 
@@ -17,34 +17,35 @@ function onload() {
     var maxWidth = 1500, maxHeight = 300;
 
     d3.json('60min.json', function(data) {
-        data = data.slice(data.length - 125, data.length);
-        data.forEach(function(d, i) { d.index = i });
-
         var maNs = [ 5, 10, 20, 60 ];
         maNs.forEach(function(maN) { calcMA(data, maN) });
+
+        data = data.slice(data.length - 125, data.length);
+        data.forEach(function(d, i) { d.index = i });
 
         var width = maxWidth / data.length;
 
         var min = d3.min(data, function(d) { return Number(d.low) });
         var max = d3.max(data, function(d) { return Number(d.high) });
-        var scale = d3.scale.linear().domain([min, max]).range([0, maxHeight]);
+        var scale = d3.scale.linear().domain([max, min]).range([0, maxHeight]);
 
-        var axis = d3.svg.axis().scale(scale).orient('right');
+        var ticks = [ min, (max * 0.25 + min * 0.75), (max * 0.50 + min * 0.50), (max * 0.75 + min * 0.25), max ];
+        var axis = d3.svg.axis().scale(scale).orient('right').tickValues(ticks).tickFormat(d3.format('.2f'));
 
         function left(d) { return d.index * width + 1 }
-        function mid(d) { return (d.index + .5) * width  }
+        function mid(d) { return (d.index + 0.5) * width  }
         function right(d) { return (d.index + 1) * width - 1 }
 
-        function open(d) { return maxHeight - scale(Number(d.open)) }
-        function close(d) { return maxHeight - scale(Number(d.close)) }
-        function low(d) { return maxHeight - scale(Number(d.low)) }
-        function high(d) { return maxHeight - scale(Number(d.high)) }
+        function open(d) { return scale(Number(d.open)) }
+        function close(d) { return scale(Number(d.close)) }
+        function low(d) { return scale(Number(d.low)) }
+        function high(d) { return scale(Number(d.high)) }
 
-        function ma(d, n) { return maxHeight - scale(Number(d.ma[n])) }
+        function ma(d, n) { return scale(Number(d.ma[n])) }
 
-        var yang = data.filter(function(d) { return d.close > d.open });
-        var yin = data.filter(function(d) { return d.close < d.open });
-        var cross = data.filter(function(d) { return d.close == d.open });
+        var yang = data.filter(function(d) { return Number(d.close) > Number(d.open) });
+        var yin = data.filter(function(d) { return Number(d.close) < Number(d.open) });
+        var cross = data.filter(function(d) { return Number(d.close) == Number(d.open) });
 
         var gK = d3.select('svg')
             .append('g')
@@ -53,8 +54,16 @@ function onload() {
 
         var gAxis = gK.append('g')
             .attr('class', 'axis')
-            .attr('transform', 'translate(' + maxWidth + ', 0)')
-            .call(axis);
+            .attr('transform', 'translate(' + maxWidth + ', 0)');
+        gAxis.call(axis);
+
+        var gTick = gK.append('g')
+            .attr('class', 'tick');
+        gTick.selectAll('path')
+            .data(ticks)
+            .enter()
+            .append('path')
+            .attr('d', function(d) { return 'M 0,' + scale(d) + ' L ' + maxWidth + ',' + scale(d) });
 
         var gYang = gK.selectAll('g.yang')
             .data(yang)
@@ -70,6 +79,7 @@ function onload() {
             .attr('d', function(d) { return 'M ' + mid(d) + ',' + low(d) + ' L ' + mid(d) + ',' + open(d) });
         gYang.append('path')
             .attr('d', function(d) { return 'M ' + mid(d) + ',' + high(d) + ' L ' + mid(d) + ',' + close(d) });
+        gYang.on('mouseover', function(d) { console.log(d.close) });
 
         var gYin = gK.selectAll('g.yin')
             .data(yin)
