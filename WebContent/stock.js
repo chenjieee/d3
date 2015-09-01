@@ -65,11 +65,13 @@ function onload() {
             .append('path')
             .attr('d', function(d) { return 'M 0,' + scale(d) + ' L ' + maxWidth + ',' + scale(d) });
 
-        var gYang = gK.selectAll('g.yang')
+        var gYang = gK.append('g')
+            .attr('class', 'yang')
+            .selectAll('g')
             .data(yang)
             .enter()
             .append('g')
-            .attr('class', 'yang');
+            .attr('index', function(d) { return d.index });
         gYang.append('rect')
             .attr('x', function(d) { return left(d) })
             .attr('y', function(d) { return close(d) })
@@ -79,13 +81,14 @@ function onload() {
             .attr('d', function(d) { return 'M ' + mid(d) + ',' + low(d) + ' L ' + mid(d) + ',' + open(d) });
         gYang.append('path')
             .attr('d', function(d) { return 'M ' + mid(d) + ',' + high(d) + ' L ' + mid(d) + ',' + close(d) });
-        gYang.on('mouseover', function(d) { console.log(d.close) });
 
-        var gYin = gK.selectAll('g.yin')
+        var gYin = gK.append('g')
+            .attr('class', 'yin')
+            .selectAll('g')
             .data(yin)
             .enter()
             .append('g')
-            .attr('class', 'yin');
+            .attr('index', function(d) { return d.index });
         gYin.append('rect')
             .attr('x', function(d) { return left(d) })
             .attr('y', function(d) { return open(d) })
@@ -96,11 +99,13 @@ function onload() {
         gYin.append('path')
             .attr('d', function(d) { return 'M ' + mid(d) + ',' + high(d) + ' L ' + mid(d) + ',' + open(d) });
 
-        var gCross = gK.selectAll('g.cross')
+        var gCross = gK.append('g')
+            .attr('class', 'cross')
+            .selectAll('g')
             .data(cross)
             .enter()
             .append('g')
-            .attr('class', 'cross');
+            .attr('index', function(d) { return d.index });
         gCross.append('path')
             .attr('d', function(d) { return 'M ' + left(d) + ',' + close(d) + ' L ' + right(d) + ',' + close(d) });
         gCross.append('path')
@@ -108,12 +113,14 @@ function onload() {
         gCross.append('path')
             .attr('d', function(d) { return 'M ' + mid(d) + ',' + high(d) + ' L ' + mid(d) + ',' + open(d) });
 
-        maNs.forEach(function(maN) {
-            var maPath = 'M ' + data.filter(function(d) { return d.ma[maN] }).map(function(d) { return mid(d) + ',' + ma(d, maN) }).join(' L ');
-            var gMa = gK.append('g')
-                .attr('class', 'ma' + maN);
-            gMa.append('path')
-                .attr('d', maPath);
-        });
+        var gMa = gK.append('g')
+            .attr('class', 'ma')
+            .selectAll('g')
+            .data(maNs)
+            .enter()
+            .append('g')
+            .attr('index', function(d) { return d });
+        gMa.append('path')
+            .attr('d', function(maN) { return 'M ' + data.filter(function(d) { return d.ma[maN] }).map(function(d) { return mid(d) + ',' + ma(d, maN) }).join(' L ') });
     });
 }
