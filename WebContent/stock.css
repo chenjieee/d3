@@ -1,0 +1,58 @@
+g.k g.bg path {
+    fill: none;
+    stroke: #b00000;
+    stroke-width: 1;
+    stroke-dasharray: 1 4;
+}
+
+g.k g.yang rect {
+    fill: none;
+    stroke: #ff3232;
+    stroke-width: 1;
+}
+
+g.k g.yang path {
+    fill: none;
+    stroke: #ff3232;
+    stroke-width: 1;
+}
+
+g.k g.yin rect {
+    fill: #54ffff;
+}
+
+g.k g.yin path {
+    fill: none;
+    stroke: #54ffff;
+    stroke-width: 1;
+}
+
+g.k g.cross path {
+    fill: none;
+    stroke: #ffffff;
+    stroke-width: 1;
+}
+
+g.k g.ma5 path {
+    fill: none;
+    stroke: #fafafa;
+    stroke-width: 1;
+}
+
+g.k g.ma10 path {
+    fill: none;
+    stroke: #ffff00;
+    stroke-width: 1;
+}
+
+g.k g.ma20 path {
+    fill: none;
+    stroke: #ff00ff;
+    stroke-width: 1;
+}
+
+g.k g.ma60 path {
+    fill: none;
+    stroke: #00ff00;
+    stroke-width: 1;
+}
