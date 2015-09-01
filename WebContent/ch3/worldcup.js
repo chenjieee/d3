@@ -58,5 +58,18 @@ function createSoccerViz() {
             teamG.select('circle')
                 .style('fill', 'pink');
         });
+
+        d3.text('modal.html', function(data) {
+            d3.select('body')
+                .append('div')
+                .attr('id', 'modal')
+                .html(data);
+        });
+
+        teamG.on('click', function(d) {
+            d3.selectAll('td.data')
+                .data(d3.values(d))
+                .html(function(p) { return p });
+        });
     });
 }
