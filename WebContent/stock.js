@@ -25,8 +25,16 @@ function onload() {
 
         var width = maxWidth / data.length;
 
-        var min = d3.min(data, function(d) { return Number(d.low) });
-        var max = d3.max(data, function(d) { return Number(d.high) });
+        var min = d3.min(data, function(d) {
+            var values = maNs.map(function(maN) { return d.ma[maN] });
+            values.push(Number(d.low));
+            return d3.min(values);
+        });
+        var max = d3.max(data, function(d) {
+            var values = maNs.map(function(maN) { return d.ma[maN] });
+            values.push(Number(d.high));
+            return d3.max(values);
+        });
         var scale = d3.scale.linear().domain([max, min]).range([0, maxHeight]);
 
         var ticks = [ min, (max * 0.25 + min * 0.75), (max * 0.50 + min * 0.50), (max * 0.75 + min * 0.25), max ];
