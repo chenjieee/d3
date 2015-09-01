@@ -1,8 +1,19 @@
-g.k g.bg path {
+g.k g.axis path.domain {
+    fill: none;
+    stroke: #ffffff;
+    stroke-width: 1;
+}
+
+g.k g.axis g.tick line {
     fill: none;
     stroke: #b00000;
     stroke-width: 1;
     stroke-dasharray: 1 4;
+}
+
+g.k g.axis g.tick text {
+    font-size: .7em;
+    fill: #ff3232;
 }
 
 g.k g.yang rect {
